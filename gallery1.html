@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Image Gallery</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f4f4f4;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      padding: 20px;
+    }
+    .gallery img {
+      width: 100%;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .gallery img:hover {
+      transform: scale(1.05);
+    }
+    .lightbox {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 10px;
+    }
+    .close, .prev, .next {
+      position: absolute;
+      color: white;
+      font-size: 2em;
+      cursor: pointer;
+      user-select: none;
+    }
+    .close { top: 20px; right: 30px; }
+    .prev { left: 30px; top: 50%; transform: translateY(-50%); }
+    .next { right: 30px; top: 50%; transform: translateY(-50%); }
+  </style>
+</head>
+<body>
+
+<div class="gallery" id="gallery">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCZEs9biplX1sLH-Y55nkaQ3IjSbI2N-zmYw&s" alt="Image 1">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRl1vMqrNMpVszUUfIovT9konBDQ0HAym52-Q&s" alt="Image 2">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzpJxARc6nM85aYpgpOaFigNjCMQwFe04fqw&s" alt="Image 3">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTx6Uo3hKv8h_9Jr9Pec2DJ_R9TCbFGDRTnVw&s" alt="Image 4">
+</div>
+
+<div class="lightbox" id="lightbox">
+  <span class="close" id="closeBtn">&times;</span>
+  <span class="prev" id="prevBtn">&#10094;</span>
+  <img id="lightboxImg" src="" alt="Lightbox Image">
+  <span class="next" id="nextBtn">&#10095;</span>
+</div>
+
+<script>
+  const gallery = document.querySelectorAll('#gallery img');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const closeBtn = document.getElementById('closeBtn');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  let currentIndex = 0;
+
+  function showImage(index) {
+    lightboxImg.src = gallery[index].src;
+    lightbox.style.display = 'flex';
+    currentIndex = index;
+  }
+
+  gallery.forEach((img, index) => {
+    img.addEventListener('click', () => showImage(index));
+  });
+
+  closeBtn.addEventListener('click', () => lightbox.style.display = 'none');
+  prevBtn.addEventListener('click', () => showImage((currentIndex - 1 + gallery.length) % gallery.length));
+  nextBtn.addEventListener('click', () => showImage((currentIndex + 1) % gallery.length));
+</script>
+
+</body>
+</html>
